@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-k8s
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-k8s
+  template:
+    metadata:
+      labels:
+        app: flask-k8s
+    spec:
+      serviceAccountName: flask-user
+      containers:
+      - name: flask-k8s
+        image: oassaghir/flask-k8s:gateway
+        imagePullPolicy: Always
+        env:
+        - name: POSTGRES_HOST 
+          value: postgres-postgresql.postgres.svc.cluster.local
+        - name: POSTGRES_PASSWORD
+          value: "LnUxhWNjvp"

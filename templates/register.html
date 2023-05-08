@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Registration Form</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+    <form method="POST" action="/register">
+        <label for="company_name">Company Name:</label>
+        <input type="text" name="company_name" required>
+
+        <label for="contact_name">Contact Name:</label>
+        <input type="text" name="contact_name" required>
+
+        <label for="contact_email">Contact Email:</label>
+        <input type="email" name="contact_email" required>
+
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password" required>
+
+        <label for="confirm_password">Confirm Password:</label>
+        <input type="password" name="confirm_password" id="confirm-password" required>
+
+        <button type="submit" id="register-btn">Register</button>
+
+        <p id="password-error" style="color: red; visibility: hidden;">Passwords do not match.</p>
+    </form>
+
+    <div id="login-link">
+        Already have an account? <a href="{{ url_for('login') }}">Login</a>
+    </div>
+
+    <script>
+        const passwordInput = document.getElementById("password");
+        const confirmInput = document.getElementById("confirm-password");
+        const errorText = document.getElementById("password-error");
+        const registerButton = document.getElementById('register-btn');
+
+
+        confirmInput.addEventListener("input", () => {
+            if (confirmInput.value !== passwordInput.value) {
+                errorText.style.visibility = "visible";
+                registerButton.disabled = true;
+
+            } else {
+                errorText.style.visibility = "hidden";
+                registerButton.disabled = false;
+
+            }
+        });
+    </script>
+</body>
+
+</html>

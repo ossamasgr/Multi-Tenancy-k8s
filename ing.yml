@@ -1,0 +1,48 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    kubernetes.io/ingress.class: nginx
+    meta.helm.sh/release-name: ex
+    meta.helm.sh/release-namespace: ex
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      rewrite ^/ex(/.*)$ $1 break;
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/use-regex: "true"
+  creationTimestamp: "2023-05-07T10:53:03Z"
+  generation: 1
+  labels:
+    app.kubernetes.io/managed-by: Helm
+  name: ex-ingress
+  namespace: ex
+  resourceVersion: "976878"
+  uid: 6283cde5-b91c-4c3b-9dfa-74f7b8ea0334
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: app.rifnology.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: ex-workflow-frontend-svc
+            port:
+              name: http
+        path: /ex(/|$)(.*)
+        pathType: Prefix
+      - backend:
+          service:
+            name: ex-workflow-frontend-svc
+            port:
+              name: http
+        path: /(.*)
+        pathType: Prefix
+  tls:
+  - hosts:
+    - app.rifnology.com
+    secretName: app-tls-front
+status:
+  loadBalancer:
+    ingress:
+    - ip: 45.84.138.63

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.company_name }}-workflow-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.company_name }}-workflow-frontend
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.company_name }}-workflow-frontend
+    spec:
+      containers:
+      - name: {{ .Values.company_name }}-workflow-frontend
+        image: oassaghir/workflow-frontend:latest
+        imagePullPolicy: Always
+        env:
+        - name: BASE_URL
+          value: https://{{ .Values.company_name }}.rifnology.com/api/
+        - name: BASE_URL_IMG
+          value: https://{{ .Values.company_name }}.rifnology.com/
+        - name: BASE_HREF
+          value: /{{ .Values.company_name }}/

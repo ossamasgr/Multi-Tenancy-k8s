@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: app-tls-backend
+spec:
+  secretName: app-tls-secret-backend
+  commonName: {{ .Values.company_name }}.rifnology.com
+  dnsNames:
+  - {{ .Values.company_name }}.rifnology.com
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer

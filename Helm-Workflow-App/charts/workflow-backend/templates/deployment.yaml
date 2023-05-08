@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.company_name }}-workflow-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.company_name }}-workflow-backend
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.company_name }}-workflow-backend
+    spec:
+      initContainers:
+      - name: wait-for-db
+        image: mysql:8.0.26
+        env:
+        - name: DB_HOST
+          value: {{ .Values.company_name }}-mysql.{{ .Values.company_name }}.svc.cluster.local
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.company_name }}-mysql
+              key: mysql-root-password
+        command:
+        - sh
+        - -c
+        - |
+          until mysql -h $DB_HOST -u root -p"$DB_PASSWORD" -e "select 1"; do
+            echo "waiting for database to be ready..." && sleep 5;
+          done
+      containers:
+      - name: {{ .Values.company_name }}-workflow-backend
+        image: oassaghir/workflow-backend:latest
+        imagePullPolicy: Always
+        env:
+        - name: IS_PROD
+          value: "false"
+        - name: PROD_PORT
+          value: "8000"
+        - name: DEV_PORT
+          value: "3000"
+        - name: DB_HOST
+          value: {{ .Values.company_name }}-mysql.{{ .Values.company_name }}.svc.cluster.local
+        - name: DB_USER
+          value: "root"
+        - name: DB_PORT
+          value: "3306"
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.company_name }}-mysql
+              key: mysql-root-password 
+        - name: DB_NAME
+          value: "{{ .Values.company_name }}"
+        - name: SWAGGER_PROD_HOST
+          value: "0.0.0.0"
+        - name: SWAGGER_DEV_HOST
+          value: "0.0.0.0"
+        - name: SECRET
+          value: "none"
+        - name: SSL_CRT
+          value: "none"
+        - name: SSL_KEY
+          value: "none"
+        - name: accessKeyId
+          value: "myaccesskeyid"
+        - name: secretAccessKey
+          value: "mysecretaccesskey"
+        - name: region
+          value: "myregion"
+

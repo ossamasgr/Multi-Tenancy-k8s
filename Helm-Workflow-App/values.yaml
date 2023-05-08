@@ -1,0 +1,10 @@
+mysql:
+  auth:
+    createDatabase: true
+    database: "tststst"
+
+workflow-backend:
+  company_name: "tst"
+  
+workflow-frontend:
+  company_name: "tst"

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.company_name }}-workflow-backend-svc
+spec:
+  selector:
+    app: {{ .Values.company_name }}-workflow-backend
+  ports:
+  - name: http
+    port: 3000
+    targetPort: 3000
+

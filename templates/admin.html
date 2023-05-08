@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Page</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='admin.css') }}">
+</head>
+<body>
+    <h1>Admin Page</h1>
+    <table>
+        <tr>
+            <th>Company Name</th>
+            <th>Contact Name</th>
+            <th>Contact Email</th>
+            <th>Password</th>
+            <th></th>
+        </tr>
+        {% for row in data %}
+        <tr>
+            <td>{{ row[0] }}</td>
+            <td>{{ row[1] }}</td>
+            <td>{{ row[2] }}</td>
+            <td>{{ row[3] }}</td>
+            <td><form action="/delete/{{ row[0] }}" method="POST"><button type="submit">Delete</button></form></td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
+

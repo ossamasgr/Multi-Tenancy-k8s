@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Waiting for resources to deploy</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/3.0.0/fetch.min.js"></script>
+    <script>
+      var subdomain = "{{ subdomain }}";
+      function checkStatus() {
+	fetch('/status/' + subdomain)
+          .then(response => response.json())
+          .then(data => {
+            if (data.ready) {
+              window.location.href = "/login";
+            } else {
+              setTimeout(checkStatus, 1000);
+            }
+          });
+      }
+      checkStatus();
+    </script>
+  </head>
+  <body>
+    <div class="loader"></div>
+  </body>
+  <style>
+    .loader {
+      border: 16px solid #f3f3f3;
+      border-top: 16px solid #3498db;
+      border-radius: 50%;
+      width: 120px;
+      height: 120px;
+      animation: spin 2s linear infinite;
+      margin: auto;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</html>
